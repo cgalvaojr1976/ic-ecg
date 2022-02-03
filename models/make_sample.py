@@ -13,7 +13,8 @@ import shutil
 import pantompkins
 import csv
 
-destino = "/home/matheus/Documentos/Facul/IC/ECG_classification/ic-ecg/models/database_part2"
+
+destino = "/home/matheus/Documentos/Facul/IC/ECG_classification/ptb-diagnostic-ecg-database-1.0.0/todos/lidos"
 # import numpy as np
 # import matplotlib.pyplot as plt
 
@@ -22,15 +23,19 @@ with open("batimentos.csv", "w", newline='') as f:
     writer = csv.writer(f)
 
 # Podia criar uma funcao aqui e passar no writer
-    for root, dirs, files in os.walk("models/database_part", topdown=False):
+    for root, dirs, files in os.walk("todos", topdown=False):
         for name in files:
             temp = name.split('.')
             if len(temp)==2:
                 if name.split('.')[1] == 'hea':
-                    writer.writerow([temp[0]])
-                    record, fields = wfdb.rdsamp(os.path.join(root, temp[0]), channels=[0])
+                    diretorio = os.path.join(root, temp[0])
                     # Gravar os batimentos de um sinal
-                    beats = pantompkins.batimentos(record, fields)
+                    try:
+                    	record, fields = wfdb.rdsamp(diretorio, channels=[1])
+                    	beats = pantompkins.batimentos(record, fields)
+                    #Excessão caso não haver o arquivo para ler os dados.
+                    except:
+                    	beats = None
                     if beats is not None:
                         for beat in beats:
                             writer.writerow(beat)
