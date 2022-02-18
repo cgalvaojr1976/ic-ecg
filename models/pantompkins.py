@@ -1,5 +1,4 @@
 '''
-'''
 O algoritmo de Pan & Tompkins passa por 6 diferentes fases
 ele foi feito para representação em tempo real, portanto
 nesse código só foi feito até a quinta parte.
@@ -16,8 +15,8 @@ import matplotlib.pyplot as plt
 
 record, fields = wfdb.rdsamp("/home/matheus/Documentos/Facul/IC/ECG_classification/ptb-diagnostic-ecg-database-1.0.0/todos/s0004_re", channels=[1])
 
-def peaks(signal):
-    fs = 2000
+def peaks(signal, frequencia):
+    fs = frequencia
     
     # vetores dos filtros
     low_b = np.zeros(13)
@@ -26,6 +25,7 @@ def peaks(signal):
     low_b[12] = 1
     low_a = np.array([1,-2,1])
     
+    # Passa baixa
     sos_l = sig.tf2sos(b=low_b,a=low_a)
     
     high_b = np.zeros(33)
@@ -35,6 +35,7 @@ def peaks(signal):
     high_b[32] = 1/32 
     high_a = np.array([1,-1])
     
+    # Passa alta
     sos_h = sig.tf2sos(b=high_b,a=high_a)
     
     deriv_b = np.array([2,3,9,-1,-2])
@@ -42,15 +43,18 @@ def peaks(signal):
     
     deriv_a = 1
     
+    # Derivada
     sos_d = sig.tf2sos(b=deriv_b,a=deriv_a)
     
-    #apply filter
+    # Aplica filtro
     yl = sig.sosfilt(sos_l,signal)
     yh = sig.sosfilt(sos_l, yl)
     yd = sig.sosfilt(sos_d, yh)
+    
+    # Quadrado do filtro
     yp = np.power(yd,2)
 
-    #integracao
+    # Integração
     N_average = int(fs*0.15)
     y_a = np.convolve(yp.flatten(),np.ones(N_average), 'same') / N_average    
     
