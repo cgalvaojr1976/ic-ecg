@@ -1,0 +1,27 @@
+1st degree AV block                              |270492004|  IAVB
+Atrial fibrillation                              |164889003|  AF
+Atrial flutter                                   |164890007|  AFL
+Bradycardia                                      |426627000|  Brady
+Complete right bundle branch block               |713427006|  CRBBB
+Incomplete right bundle branch block             |713426002|  IRBBB
+Left anterior fascicular block                   |445118002|  LAnFB
+Left axis deviation                              |39732003 |  LAD
+Left bundle branch block                         |164909002|  LBBB
+Low QRS voltages                                 |251146004|  LQRSV
+Nonspecific intraventricular conduction disorder |698252002|  NSIVCB
+Pacing rhythm                                    |10370003 |  PR
+Premature atrial contraction                     |284470004|  PAC
+Premature ventricular contractions               |427172004|  PVC
+Prolonged PR interval                            |164947007|  LPR
+Prolonged QT interval                            |111975006|  LQT
+Q wave abnormal                                  |164917005|  QAb
+Right axis deviation                             |47665007 |  RAD
+Right bundle branch block                        |59118001 |  RBBB
+Sinus arrhythmia                                 |427393009|  SA
+Sinus bradycardia                                |426177001|  SB
+Sinus rhythm                                     |426783006|  NSR
+Sinus tachycardia                                |427084000|  STach
+Supraventricular premature beats                 |63593006 |  SVPB
+T wave abnormal                                  |164934002|  TAb
+T wave inversion                                 |59931005 |  TInv
+Ventricular premature beats                      |17338001 |  VPB
