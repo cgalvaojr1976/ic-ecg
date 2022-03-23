@@ -72,15 +72,19 @@ def peaks(signal, frequencia):
 
 def batimentos(sinal, codigo, frequencia, lead):
     picos = peaks(sinal, frequencia)
+    # 0.25 segundos antes do pico
+    inicio = int(frequencia*0.25)
+    # 0.4 segundos após o pico
+    fim = int(frequencia*0.4)
     df = pd.DataFrame()
 
     for posicao in picos[0]:
         #Descartar batimentos incompletos
-        if posicao > 250 and (posicao < (len(sinal) - 400)):
+        if posicao > inicio and (posicao < (len(sinal) - fim)):
             batimento = []
 
-            for x in range(651):
-                batimento.append(float(sinal[posicao-250+x]))
+            for x in range(inicio+fim+1):
+                batimento.append(float(sinal[posicao-inicio+x]))
 
             batimento.append(codigo) # Add na ultima coluna o tipo de batimento
             batimento.append(lead) # Add na ultima coluna o tipo de batimento
