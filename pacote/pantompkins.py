@@ -92,8 +92,6 @@ def batimentos(sinal, codigo, frequencia, lead):
             df = df.append(batimento_s, ignore_index=True)
 
     return df
-
-
 # beats = batimentos(record)
 # print(beats4)
 
