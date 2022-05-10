@@ -2,22 +2,50 @@
 ECG anomaly detection
 This repository contains several models and strategies employed in ECG/EKG anomaly detection, including support procedures (e.g Pan-Tompkins algorithm)
 
--- beats
+## notebooks
+### apply_pant.ipynb
+Using a csv file created from batimentos.py, extract the beatings to another csv file
+Each line contains the beatings and (last column ?)
+
+
+### concatenar.ipynb
+Notebook used to concatenate files created in "apply_pant" notebook.
+
+### exploratory-v2.ipynb and exploratory.ipynb
+Notebooks to explore the data
+
+### leitura_notebook.ipynb
+????
+### PanTompkins.ipynb
 ????
 
--- data_analysis
-Performa data analysis: statistics on Dx, gender, number of files, etc. 
-Also verify beats extracted from file
+## Pacote
+### batimentos.py
+Saves 'records1.csv' with all recordings with specified leads and codes (Dx)
+Each line has:
+- lead
+- respective data
+- Dx
+- filename
 
--- datasets
-labesl.txt: labels according to phisyonet challenge
-*.csv: file information for each dataset
----- records 
-????
+### leitura.py
+Saves a csv file (dataset name) with filenames and info data
+Used to populate Total.csv file
+
+### pantompkins.py
+auxiliary functions to extract beatings from data
 
 
--- models
-Notebooks with models for ECG classification
+## Read Data
+### ler_arquivo_wfdb
+Using wdbf library
 
--- notebooks
----- imagem
+## Support
+### Pan-Tompkins-algorithm.ipynb
+Notebook showing Pan-tompkins based peak detection
+
+### Pan-Tompkins-algorithm_general_filter.ipynb
+Notebook showing Pan-tompkins based peak detection, but using custom low-pass and high-pass filters designed by the authors 
+
+### make_sample.py
+????????
