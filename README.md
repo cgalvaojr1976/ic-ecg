@@ -2,6 +2,8 @@
 ECG anomaly detection
 This repository contains several models and strategies employed in ECG/EKG anomaly detection, including support procedures (e.g Pan-Tompkins algorithm)
 
+batimentos.py -->  apply_pant.ipynb --> concatenar.ipynb
+
 ## notebooks
 ### apply_pant.ipynb
 Using a csv file created from batimentos.py, extract the beatings to another csv file
