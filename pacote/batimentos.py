@@ -1,25 +1,29 @@
 '''Esse código tem a finalidade de criar uma tabela com os batimentos e
 suas labels.
-Obs: Para o código funcionar a tabela 'Total.csv' deve estar no mesmo 
-local desse script.
+
+TODO: 
+    use input and output directories as arguments
+    fix sampling rate
+
+    
 '''
 
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+#import numpy as np
+#import matplotlib.pyplot as plt
 import wfdb
 
-diretorio = '/home/matheus/Documentos/Facul/IC/ECG_classification/data/'
+diretorio = '../all_data/'
 
 # Lista com os códigos que precisamos
-codigo = [426627000]
-
+codigo = [164947007]
+#codigo=[426783006]
 # Lista dos leads
-leads = [0,1,2]
+leads = [2]
 
-def records(diretorio, codigo, leads):
+def records(diretorio, codigo, leads, n_Files):
     # Criar tabela que contenha os Datasets e os Arquivos com os códigos
-    data_frame = pd.read_csv('/home/matheus/Documentos/Facul/IC/ECG_classification/ic-ecg/datasets/Total.csv')
+    data_frame = pd.read_csv('../datasets/Total.csv')
     # Cria tabela com apenas os códigos necessários
     df = pd.DataFrame(columns= ['arquivos', 'base', 'Dx'])
 
@@ -31,16 +35,13 @@ def records(diretorio, codigo, leads):
     records = pd.DataFrame()
 
     # Leitura dos records
-    for x in range(len(df)):
+    for x in range(min(len(df),n_Files)):
 
         destino = diretorio + df.loc[x]['base'] + '/' + df.loc[x]['arquivos']
-
-        if df.loc[x]['fs'] == 500.0:
-            record, fields = wfdb.rdsamp(destino, channels = leads, sampto= 5000)
-        elif df.loc[x]['fs'] == 1000.0:
-            record, fields = wfdb.rdsamp(destino, channels = leads, sampto= 5000)
-        elif df.loc[x]['fs'] == 257:
-            record, fields = wfdb.rdsamp(destino, channels = leads, sampto= 5000)
+         
+        #if df.loc[x]['fs'] != 500.0:
+            #resample
+        record, fields = wfdb.rdsamp(destino, channels = leads, sampto= int(df.loc[x]['fs']*10))
 
         # Colocar o record em uma data_frame Junto com seu código
         aux = pd.DataFrame(record.transpose())
@@ -48,11 +49,14 @@ def records(diretorio, codigo, leads):
         aux['arritmia'] = int(df.loc[x]['Dx'])
         # Inserir coluna de leads
         aux['leads'] = leads
+        #Inserir coluna de fs
+        aux['fs'] = df.loc[x]['fs']
         # Inserir a coluna com nome do arquivo
         aux['arquivo'] = df.loc[x]['arquivos']
         records = records.append(aux)
 
     # Gravar Tabela
-    records.to_csv('records1.csv')
+    records.to_csv('../records/records1'+str(codigo)+'.csv')
+    print(str(x+1) + ' files used')
 
-records(diretorio,codigo,leads)
+records(diretorio,codigo,leads,n_Files=500)
