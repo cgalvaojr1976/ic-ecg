@@ -21,7 +21,14 @@ codigo = [164947007]
 # Lista dos leads
 leads = [2]
 
-def records(diretorio, codigo, leads, n_Files):
+def records(diretorio, codigo, leads, n_Files, resample=False, fs=500, denoise=0):
+    '''
+    resample - boolean: resample or not
+    fs - int: default sampling rate for resampling
+    denoise - int: 0-nothing
+                   1-Butterworth
+                   2-DWT
+    '''
     # Criar tabela que contenha os Datasets e os Arquivos com os códigos
     data_frame = pd.read_csv('../datasets/Total.csv')
     # Cria tabela com apenas os códigos necessários
@@ -39,10 +46,11 @@ def records(diretorio, codigo, leads, n_Files):
 
         destino = diretorio + df.loc[x]['base'] + '/' + df.loc[x]['arquivos']
          
-        #if df.loc[x]['fs'] != 500.0:
-            #resample
         record, fields = wfdb.rdsamp(destino, channels = leads, sampto= int(df.loc[x]['fs']*10))
-
+        #if df.loc[x]['fs'] != 500.0:
+            #resample if necessary
+        # clean if necessary
+            
         # Colocar o record em uma data_frame Junto com seu código
         aux = pd.DataFrame(record.transpose())
         # Inserir a linha com o nome da arritmia
@@ -56,7 +64,7 @@ def records(diretorio, codigo, leads, n_Files):
         records = records.append(aux)
 
     # Gravar Tabela
-    records.to_csv('../records/records1'+str(codigo)+'.csv')
+    records.to_csv('../records/records1'+str(codigo)+str(denoise)+'.csv')
     print(str(x+1) + ' files used')
 
 records(diretorio,codigo,leads,n_Files=500)
