@@ -1,7 +1,7 @@
 '''Esse código tem a finalidade de criar uma tabela com os batimentos e
 suas labels.
 
-TODO: 
+TODO:
     use input and output directories as arguments
     fix sampling rate
 
@@ -9,35 +9,23 @@ TODO:
 '''
 
 import pandas as pd
-#import numpy as np
-#import matplotlib.pyplot as plt
+import numpy as np
+from scipy import signal
 import wfdb
+    
+def records(diretorio, codigo, leads, n_Files):
 
-diretorio = '../all_data/'
 
-# Lista com os códigos que precisamos
-codigo = [164947007]
-#codigo=[426783006]
-# Lista dos leads
-leads = [2]
-
-def records(diretorio, codigo, leads, n_Files, resample=False, fs=500, denoise=0):
-    '''
-    resample - boolean: resample or not
-    fs - int: default sampling rate for resampling
-    denoise - int: 0-nothing
-                   1-Butterworth
-                   2-DWT
-    '''
     # Criar tabela que contenha os Datasets e os Arquivos com os códigos
-    data_frame = pd.read_csv('../datasets/Total.csv')
+    data_frame = pd.read_csv('/home/matheus/Documentos/Facul/IC/ECG_classification/ic-ecg/datasets/Total.csv')
     # Cria tabela com apenas os códigos necessários
-    df = pd.DataFrame(columns= ['arquivos', 'base', 'Dx'])
+    df = pd.DataFrame(columns= ['arquivos', 'base', 'Dx', 'fs'])
 
     for x in range(len(codigo)):
         df = df.append(data_frame.loc[data_frame['Dx'] == codigo[x]])
     
     df = df.sample(frac=1).reset_index(drop=True)
+
     #Cria a tabela dos records
     records = pd.DataFrame()
 
@@ -46,10 +34,14 @@ def records(diretorio, codigo, leads, n_Files, resample=False, fs=500, denoise=0
 
         destino = diretorio + df.loc[x]['base'] + '/' + df.loc[x]['arquivos']
          
-        record, fields = wfdb.rdsamp(destino, channels = leads, sampto= int(df.loc[x]['fs']*10))
-        #if df.loc[x]['fs'] != 500.0:
-            #resample if necessary
-        # clean if necessary
+        if df.loc[x]['fs'] == 500.0:
+            record, fields = wfdb.rdsamp(destino, channels = leads, sampto= int(df.loc[x]['fs']*10))
+        elif df.loc[x]['fs'] == 1000:
+            record, fields = wfdb.rdsamp(destino, channels = leads, sampto= int(df.loc[x]['fs']*10))
+            record = signal.resample(record,5000)
+        elif df.loc[x]['fs'] == 254:
+            record, fields = wfdb.rdsamp(destino, channels = leads, sampto= int(df.loc[x]['fs']*10))
+            record = signal.resample(record,5000)
             
         # Colocar o record em uma data_frame Junto com seu código
         aux = pd.DataFrame(record.transpose())
@@ -62,9 +54,5 @@ def records(diretorio, codigo, leads, n_Files, resample=False, fs=500, denoise=0
         # Inserir a coluna com nome do arquivo
         aux['arquivo'] = df.loc[x]['arquivos']
         records = records.append(aux)
-
-    # Gravar Tabela
-    records.to_csv('../records/records1'+str(codigo)+str(denoise)+'.csv')
-    print(str(x+1) + ' files used')
-
-records(diretorio,codigo,leads,n_Files=500)
+        
+    return records
