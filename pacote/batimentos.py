@@ -17,7 +17,7 @@ def records(diretorio, codigo, leads, n_Files):
 
 
     # Criar tabela que contenha os Datasets e os Arquivos com os códigos
-    data_frame = pd.read_csv('/home/matheus/Documentos/Facul/IC/ECG_classification/ic-ecg/datasets/Total.csv')
+    data_frame = pd.read_csv('../datasets/Total.csv')
     # Cria tabela com apenas os códigos necessários
     df = pd.DataFrame(columns= ['arquivos', 'base', 'Dx', 'fs'])
 

@@ -75,7 +75,7 @@ def batimentos(sinal, codigo, frequencia, lead):
     # 0.25 segundos antes do pico
     inicio = int(frequencia*0.25)
     # 0.4 segundos após o pico
-    fim = int(frequencia*0.4)
+    fim = int(frequencia*0.35)
     df = pd.DataFrame()
 
     for posicao in picos[0]:
